@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{paper_id}} Review Comments</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1f2933;
+      --muted: #52616f;
+      --line: #d8dee6;
+      --panel: #f7f9fb;
+      --major: #9b1c1c;
+      --minor: #375a7f;
+      --accent: #174ea6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #eef2f6;
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", "Microsoft YaHei", serif;
+      line-height: 1.58;
+    }
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+      background: #fff;
+      min-height: 100vh;
+    }
+    h1, h2, h3 { line-height: 1.25; letter-spacing: 0; }
+    h1 { margin: 0 0 8px; font-size: 30px; }
+    h2 { margin: 34px 0 16px; border-bottom: 2px solid var(--line); padding-bottom: 8px; }
+    h3 { margin: 0 0 12px; font-size: 20px; }
+    .meta, .note { color: var(--muted); }
+    .summary-grid, .comment-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .panel, .comment {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fff;
+    }
+    .panel { background: var(--panel); }
+    .tag {
+      display: inline-block;
+      margin-right: 8px;
+      padding: 2px 7px;
+      border-radius: 5px;
+      color: #fff;
+      font: 700 13px Arial, sans-serif;
+      vertical-align: 2px;
+    }
+    .tag.major { background: var(--major); }
+    .tag.minor { background: var(--minor); }
+    .materials {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+    .materials-title {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-weight: 700;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+    }
+    .material-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .material-grid.single { grid-template-columns: minmax(0, 1fr); }
+    figure.material-card {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .material-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #fff;
+    }
+    .material-card figcaption {
+      border-top: 1px solid var(--line);
+      padding: 8px 10px;
+      color: var(--muted);
+      font-size: 14px;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+    }
+    .copy-block {
+      white-space: pre-wrap;
+      background: #fbfcfd;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-top: 20px;
+      line-height: 1.7;
+    }
+    @media (max-width: 820px) {
+      .summary-grid, .comment-grid, .material-grid { grid-template-columns: 1fr; }
+      main { padding: 18px 12px 36px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>{{paper_title}}</h1>
+    <p class="meta">{{paper_id}} | Reviewer comments | {{date}}</p>
+
+    <section class="panel">
+      <h2>Review Recommendation / 审稿建议</h2>
+      <p><strong>{{recommendation}}</strong></p>
+      <p>{{recommendation_basis_en}}</p>
+      <p>{{recommendation_basis_zh}}</p>
+    </section>
+
+    <section>
+      <h2>Paper Summary / 论文概要</h2>
+      <div class="summary-grid">
+        <div class="panel">
+          <h3>English</h3>
+          <p>{{summary_en}}</p>
+        </div>
+        <div class="panel">
+          <h3>中文</h3>
+          <p>{{summary_zh}}</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Major Comments / 大问题</h2>
+
+      <article class="comment major">
+        <h3><span class="tag major">Major 1</span>{{major_1_title_en}} / {{major_1_title_zh}}</h3>
+        <div class="comment-grid">
+          <div><h3>English</h3><p>{{major_1_en}}</p></div>
+          <div><h3>中文</h3><p>{{major_1_zh}}</p></div>
+        </div>
+        <div class="materials">
+          <p class="materials-title">Supporting material / 对应材料</p>
+          <div class="material-grid">
+            <figure class="material-card">
+              <img src="{{asset_dir}}/{{crop_file}}" alt="{{crop_alt}}">
+              <figcaption>{{crop_caption}}</figcaption>
+            </figure>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <h2>Minor Comments / 小问题</h2>
+      <article class="comment minor">
+        <h3><span class="tag minor">Minor 1</span>{{minor_1_title_en}} / {{minor_1_title_zh}}</h3>
+        <div class="comment-grid">
+          <div><h3>English</h3><p>{{minor_1_en}}</p></div>
+          <div><h3>中文</h3><p>{{minor_1_zh}}</p></div>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <h2>Copy-Ready Draft</h2>
+      <div class="copy-block">{{copy_ready_english_only}}</div>
+    </section>
+  </main>
+</body>
+</html>

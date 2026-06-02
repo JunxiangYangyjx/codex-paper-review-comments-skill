@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+tmp/
+temp/
+*.tmp
+contact-sheet*.png
+qa-contact-sheet*.png
