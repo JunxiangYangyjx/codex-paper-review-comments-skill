@@ -57,6 +57,12 @@ The generated HTML review page follows this structure:
 
 For each issue that cites a figure, table, or equation, the skill asks Codex to crop and embed the corresponding material below the issue. Crops should include only the relevant figure/table/equation and its directly corresponding caption or explanatory lines.
 
+## Opening Generated HTML
+
+Codex in-app browser may block direct `file://` URLs for local files. When this skill generates an HTML review page, Codex should serve the output folder through a local-only `127.0.0.1` static server and open the corresponding `http://127.0.0.1:<port>/<review-file>.html` URL automatically.
+
+Users should not need to run a separate CMD or PowerShell launcher. The local server is only for previewing generated review artifacts on the same machine.
+
 ## Dependencies
 
 The skill itself is plain text plus helper scripts. Depending on the task, Codex may use:

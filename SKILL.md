@@ -59,7 +59,15 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
      `python scripts/validate_review_html.py path/to/review.html`
    - Fix any missing image refs, unreferenced assets, copy-ready Chinese text, raw HTML tags in the copy-ready block, or unrendered formula markers.
    - Manually inspect the important crops. The script cannot judge semantic crop quality.
-   - Final answer should link the HTML file and summarize checks performed.
+
+7. Open the HTML preview for the user.
+   - Do not ask the user to run a CMD, PowerShell script, or manual file opener.
+   - Do not rely on direct `file://` navigation in the Codex in-app browser; local-file URLs may be blocked by browser security policy.
+   - Start or reuse a local static server bound to `127.0.0.1` in the HTML output directory.
+   - Prefer port `8766`; if it is unavailable, choose the next free local port.
+   - Open the Codex in-app browser to `http://127.0.0.1:<port>/<html-file-name>`.
+   - Keep the server local-only and do not expose review artifacts externally.
+   - Final answer should link both the local HTML file path and the browser URL, then summarize checks performed.
 
 ## Output Rules
 
