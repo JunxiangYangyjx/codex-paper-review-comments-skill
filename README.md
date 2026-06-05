@@ -1,11 +1,12 @@
 # Paper Review Comments Skill
 
-`paper-review-comments` is a Codex skill for drafting concise academic paper review comments and generating an HTML review page with supporting figure/table/equation evidence.
+`paper-review-comments` is a Codex skill for drafting concise academic paper review comments and generating an HTML review page with supporting figure/table/equation evidence. It now prefers a token-efficient `review-data.json` source file and renders the HTML from that structured data.
 
 这个 skill 适合用来做论文审稿辅助，尤其是工程、电力电子、无线电能传输、变换器、控制和实验型论文。它会按照固定流程生成：
 
 - 论文做了什么、主要贡献和审稿建议
 - 5 个 major comments 和若干 minor comments
+- `review-data.json` 结构化源文件，方便后续低 token 修改
 - 带对应材料截图的 HTML 审稿页面
 - 英文-only 的 `Copy-Ready Draft`，方便直接粘贴到审稿系统
 
@@ -56,6 +57,23 @@ The generated HTML review page follows this structure:
 - English-only `Copy-Ready Draft`
 
 For each issue that cites a figure, table, or equation, the skill asks Codex to crop and embed the corresponding material below the issue. Crops should include only the relevant figure/table/equation and its directly corresponding caption or explanatory lines.
+
+For token efficiency, the preferred source artifact is `PaperID-review-data.json`. Evidence entries should identify where the source comes from before cropping:
+
+- `page`: PDF page number
+- `kind`: figure, table, equation, or text
+- `label`: for example `Fig. 7`, `Table II`, or `Equation (19)`
+- `locator_text`: short caption, equation lead-in, nearby wording, or exact phrase used to locate the source
+- `crop_file`: image path when a crop exists
+- `caption`: short explanation for the review page
+
+Render HTML from JSON:
+
+```powershell
+python scripts/render_review_html.py path\to\review-data.json --output path\to\review.html
+```
+
+For small follow-up edits, Codex should update the JSON and re-render the HTML instead of rereading the PDF or editing the full HTML by hand.
 
 ## Opening Generated HTML
 

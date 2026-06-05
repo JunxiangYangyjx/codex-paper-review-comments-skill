@@ -1,0 +1,43 @@
+{
+  "paper_id": "PaperID",
+  "paper_title": "Paper title",
+  "date": "YYYY-MM-DD",
+  "focus": "Short technical focus",
+  "recommendation": {
+    "decision": "Major Revision",
+    "basis_en": "Brief English basis for the recommendation.",
+    "basis_zh": "简短中文判断依据。"
+  },
+  "summary": {
+    "en": "One concise English paragraph summarizing the work.",
+    "zh": "一段简洁中文概要。"
+  },
+  "major_comments": [
+    {
+      "title_en": "Major issue title",
+      "title_zh": "大问题标题",
+      "en": "Concise English reviewer comment.",
+      "zh": "简洁中文审稿意见。",
+      "evidence": [
+        {
+          "page": 1,
+          "kind": "table",
+          "label": "Table I",
+          "locator_text": "Short source text, caption, equation lead-in, or nearby phrase used to locate this evidence.",
+          "crop_file": "",
+          "alt": "Table I evidence",
+          "caption": "Short explanation of why this evidence supports the comment."
+        }
+      ]
+    }
+  ],
+  "minor_comments": [
+    {
+      "title_en": "Minor issue title",
+      "title_zh": "小问题标题",
+      "en": "Concise English minor comment.",
+      "zh": "简洁中文小问题。",
+      "evidence": []
+    }
+  ]
+}

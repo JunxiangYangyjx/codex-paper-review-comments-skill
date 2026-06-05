@@ -1,15 +1,23 @@
 ---
 name: paper-review-comments
-description: Generate concise reviewer-style comments from local academic paper PDFs, especially engineering and power electronics manuscripts. Use when the user asks in English or Chinese to review a paper, such as “审一下这篇文章”, “帮我审稿”, “看看这篇论文该接收还是拒稿”, “生成审稿意见”, “写五个大问题和若干小问题”, “做一个审稿HTML”, or asks to judge accept/reject/major/minor revision, draft reviewer comments, create an HTML review page in the established bilingual format, attach figure/table/equation evidence under each issue, or produce an English-only copy-ready draft for a review submission system.
+description: Generate reviewer-style comments from local academic PDFs as token-efficient review-data JSON plus HTML evidence pages. Use for English/Chinese requests such as “审一下这篇文章”, “帮我审稿”, accept/reject/major/minor judgment, major/minor comments, 审稿HTML, editing existing review comments, evidence with page/figure/table/equation locators, or English-only copy-ready drafts.
 ---
 
 # Paper Review Comments
 
 ## Purpose
 
-Use this skill to turn a local manuscript PDF into reviewer-style comments and a browser-friendly HTML review page. The output should follow the current review-page pattern: bilingual analysis sections, major/minor issue cards, evidence crops under each relevant issue, and an English-only Copy-Ready Draft for direct submission.
+Use this skill to turn a local manuscript PDF into reviewer-style comments and a browser-friendly HTML review page. Prefer a token-efficient source file named `PaperID-review-data.json`, then render HTML from that data. The output should follow the current review-page pattern: bilingual analysis sections, major/minor issue cards, evidence under each relevant issue, and an English-only Copy-Ready Draft for direct submission.
 
 Do not require an existing review DOCX. If a DOCX is present, treat it only as optional style context when the user explicitly asks.
+
+## Token-Saving Rules
+
+- Treat `*-review-data.json` as the source of truth when it exists. Edit JSON first, then render HTML.
+- For follow-up edits to an existing review, do not reread the PDF, references, or whole HTML unless the requested change needs them. Use `rg` to locate only the relevant JSON or HTML fields.
+- Keep the Copy-Ready Draft generated from the English comments when possible. If hand-written, update it from the same JSON change.
+- Delay expensive figure/table/equation cropping until the major/minor issue list is stable or the user explicitly asks for final HTML evidence.
+- Do not paste large PDF text into chat. Record short evidence locators in JSON instead.
 
 ## Workflow
 
@@ -23,16 +31,21 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
    - Recommend one of: reject, major revision, minor revision, or accept.
    - For normal first-round engineering-paper reviews, default to a small number of high-impact comments rather than a long research-note summary.
 
-3. Draft the comments.
+3. Draft the comments in `review-data.json`.
    - Use 5 major issues by default unless the user asks otherwise.
-   - Add about 6-12 minor issues.
+   - Add about 4-8 minor issues unless the user asks otherwise.
    - Keep comments concise, specific, and actionable.
    - Write like a domain reviewer. Avoid generic AI/ML review jargon unless it is native to the manuscript.
    - Read `references/reviewer-style.md` before finalizing wording.
    - For power electronics, WPT, converters, motor drives, charging, or control papers, also read `references/power-electronics-review-checks.md`.
+   - Start from `assets/review-data-template.json` when creating a new review-data file.
+   - Store paper metadata, recommendation, bilingual summary, major comments, minor comments, and evidence entries in JSON.
 
-4. Build the HTML review page.
-   - Use `assets/review-html-template.html` as the visual and structural template.
+4. Build or update the HTML review page.
+   - Prefer rendering from JSON:
+     `python scripts/render_review_html.py path/to/review-data.json --output path/to/review.html`
+   - If an older review has only HTML and the user requests a small wording edit, use targeted HTML edits instead of reverse-engineering JSON.
+   - Use `assets/review-html-template.html` only as visual style reference when manual HTML editing is unavoidable.
    - Create a sibling asset folder named after the output file, for example `PaperID-review-assets/`.
    - Include:
      - title/header metadata
@@ -44,8 +57,15 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
      - Copy-Ready Draft in English only
    - Analysis and issue cards may be bilingual when useful, but the Copy-Ready Draft must be English only.
 
-5. Attach supporting material.
-   - For each issue that cites a figure, table, or equation, add the corresponding crop below that issue.
+5. Attach or plan supporting material.
+   - For each issue that cites a figure, table, equation, or source passage, first add a compact evidence list entry in JSON.
+   - Each evidence entry should include:
+     - `page`: PDF page number.
+     - `kind`: `figure`, `table`, `equation`, or `text`.
+     - `label`: source label such as `Fig. 7`, `Table II`, or `Equation (19)`.
+     - `locator_text`: the short caption, equation lead-in, nearby wording, or exact phrase used to locate the source.
+     - `crop_file`: final crop path when an image crop exists; leave empty until cropped.
+     - `caption`: one short sentence explaining why the evidence supports the comment.
    - Figures and tables should include only the figure/table itself and its title/caption.
    - Equation crops should include only the equation and the directly corresponding introductory or explanatory lines.
    - Do not include neighboring figures, neighboring section headings, unrelated paragraphs, page headers, or page footers.
@@ -55,6 +75,8 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
    - Delete temporary PDF page renders and QA contact sheets after final verification.
 
 6. Validate before delivering.
+   - If using JSON, render HTML first:
+     `python scripts/render_review_html.py path/to/review-data.json --output path/to/review.html`
    - Run:
      `python scripts/validate_review_html.py path/to/review.html`
    - Fix any missing image refs, unreferenced assets, copy-ready Chinese text, raw HTML tags in the copy-ready block, or unrendered formula markers.
