@@ -50,6 +50,7 @@ Chinese trigger phrases are also included in the skill description, for example:
 The generated HTML review page follows this structure:
 
 - review recommendation
+- comments to editor / 给编辑的话, when needed
 - paper summary
 - major comments / 大问题
 - minor comments / 小问题
@@ -59,6 +60,8 @@ The generated HTML review page follows this structure:
 For each issue that cites a figure, table, or equation, the skill asks Codex to crop and embed the corresponding material below the issue. Crops should include only the relevant figure/table/equation and its directly corresponding caption or explanatory lines.
 
 For token efficiency, the preferred source artifact is `PaperID-review-data.json`. Evidence entries should identify where the source comes from before cropping:
+
+Use the optional `comments_to_editor` field for an editor-only summary of what the paper does, its main contribution or innovation, and why the review decision is recommended. Keep this separate from the author-facing `Copy-Ready Draft`.
 
 - `page`: PDF page number
 - `kind`: figure, table, equation, or text

@@ -1,13 +1,13 @@
 ---
 name: paper-review-comments
-description: Generate reviewer-style comments from local academic PDFs as token-efficient review-data JSON plus HTML evidence pages. Use for English/Chinese requests such as “审一下这篇文章”, “帮我审稿”, accept/reject/major/minor judgment, major/minor comments, 审稿HTML, editing existing review comments, evidence with page/figure/table/equation locators, or English-only copy-ready drafts.
+description: Generate reviewer-style comments from local academic PDFs as token-efficient review-data JSON plus HTML evidence pages. Use for English/Chinese requests such as “审一下这篇文章”, “帮我审稿”, accept/reject/major/minor judgment, major/minor comments, 审稿HTML, 给编辑的话/comments to editor, editing existing review comments, evidence with page/figure/table/equation locators, or English-only copy-ready drafts.
 ---
 
 # Paper Review Comments
 
 ## Purpose
 
-Use this skill to turn a local manuscript PDF into reviewer-style comments and a browser-friendly HTML review page. Prefer a token-efficient source file named `PaperID-review-data.json`, then render HTML from that data. The output should follow the current review-page pattern: bilingual analysis sections, major/minor issue cards, evidence under each relevant issue, and an English-only Copy-Ready Draft for direct submission.
+Use this skill to turn a local manuscript PDF into reviewer-style comments and a browser-friendly HTML review page. Prefer a token-efficient source file named `PaperID-review-data.json`, then render HTML from that data. The output should follow the current review-page pattern: bilingual analysis sections, an optional Comments to Editor section, major/minor issue cards, evidence under each relevant issue, and an English-only Copy-Ready Draft for direct submission.
 
 Do not require an existing review DOCX. If a DOCX is present, treat it only as optional style context when the user explicitly asks.
 
@@ -39,7 +39,8 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
    - Read `references/reviewer-style.md` before finalizing wording.
    - For power electronics, WPT, converters, motor drives, charging, or control papers, also read `references/power-electronics-review-checks.md`.
    - Start from `assets/review-data-template.json` when creating a new review-data file.
-   - Store paper metadata, recommendation, bilingual summary, major comments, minor comments, and evidence entries in JSON.
+   - Store paper metadata, recommendation, optional `comments_to_editor`, bilingual summary, major comments, minor comments, and evidence entries in JSON.
+   - When `comments_to_editor` is requested or useful, write one concise bilingual paragraph that states what the paper does, its main contribution/innovation, and why the review decision is recommended. Keep this separate from the author-facing Copy-Ready Draft.
 
 4. Build or update the HTML review page.
    - Prefer rendering from JSON:
@@ -50,6 +51,7 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
    - Include:
      - title/header metadata
      - recommendation
+     - Comments to Editor / 给编辑的话 when `comments_to_editor` is present
      - brief paper summary and contribution assessment
      - Major Comments / 大问题
      - Minor Comments / 小问题

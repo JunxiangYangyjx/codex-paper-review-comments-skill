@@ -106,6 +106,25 @@ def comment_article(comment: dict[str, Any], idx: int, kind: str, base: Path) ->
       </article>"""
 
 
+def comments_to_editor_section(data: dict[str, Any]) -> str:
+    editor = data.get("comments_to_editor") or {}
+    en = editor.get("en", "")
+    zh = editor.get("zh", "")
+    if not en and not zh:
+        return ""
+    return f"""
+    <section>
+      <h2>Comments to Editor / 给编辑的话</h2>
+      <div class="comment">
+        <div class="comment-grid">
+          <div><h4>English</h4><p>{field_html(editor, "en")}</p></div>
+          <div><h4>中文</h4><p>{field_html(editor, "zh")}</p></div>
+        </div>
+      </div>
+    </section>
+"""
+
+
 def auto_copy_ready(data: dict[str, Any]) -> str:
     lines: list[str] = []
     summary = data.get("summary", {}).get("en", "")
@@ -215,7 +234,7 @@ def render(data: dict[str, Any], output: Path) -> str:
       <h2>Review Judgment / 审稿判断</h2>
       <p>{field_html(rec, "basis_zh")}</p>
       <p>{field_html(rec, "basis_en")}</p>
-    </section>
+    </section>{comments_to_editor_section(data)}
 
     <section class="summary">
       <h2>Overall Comment / 总体评价</h2>

@@ -8,6 +8,10 @@
     "basis_en": "Brief English basis for the recommendation.",
     "basis_zh": "简短中文判断依据。"
   },
+  "comments_to_editor": {
+    "en": "Explain what the paper does, its main contribution or innovation, and why this review decision is recommended.",
+    "zh": "说明文章做了什么、主要贡献或创新点，以及为什么建议该审稿结果。"
+  },
   "summary": {
     "en": "One concise English paragraph summarizing the work.",
     "zh": "一段简洁中文概要。"
