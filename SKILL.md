@@ -30,12 +30,18 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
    - State what the paper does and what it claims.
    - Recommend one of: reject, major revision, minor revision, or accept.
    - For normal first-round engineering-paper reviews, default to a small number of high-impact comments rather than a long research-note summary.
+   - Prioritize three questions: whether the contribution is sufficiently novel, whether the theory and reasoning are internally sound, and whether the presented simulation/experimental evidence logically supports the stated conclusions.
+   - Judge the paper against its actual claims and intended scope. Do not turn desirable follow-up work, broader operating coverage, or ideal reproducibility detail into mandatory revision requests unless the missing item is necessary to establish a central claim.
+   - When the evidence supports only a narrower conclusion, first ask the authors to clarify or narrow the claim, strengthen the reasoning, or analyze existing results. Request new experiments only when a central conclusion cannot otherwise be evaluated or supported.
 
 3. Draft the comments in `review-data.json`.
-   - Use 5 major issues by default unless the user asks otherwise.
-   - Add about 4-8 minor issues unless the user asks otherwise.
+   - Use about 3-5 major issues when genuinely distinct high-impact concerns exist; do not fill a quota.
+   - Add about 2-5 minor issues when useful; omit low-value checklist comments.
    - Keep comments concise, specific, and actionable.
    - Write like a domain reviewer. Avoid generic AI/ML review jargon unless it is native to the manuscript.
+   - Separate necessary revisions from optional improvements. A necessary revision should identify a concrete flaw in novelty, correctness, logic, or claim support.
+   - Do not routinely demand additional operating sweeps, thermal tests, uncertainty budgets, component lists, controller parameters, or hardware details. Ask for them only when they are material to a disputed conclusion, needed to interpret the reported evidence, or explicitly required for reproducibility of the claimed contribution.
+   - Prefer actions that use the existing manuscript evidence: correct a derivation, explain an assumption, compare with the closest work, add a missing analysis of existing data, improve a figure, reconcile contradictory statements, or narrow an overbroad claim.
    - Read `references/reviewer-style.md` before finalizing wording.
    - For power electronics, WPT, converters, motor drives, charging, or control papers, also read `references/power-electronics-review-checks.md`.
    - Start from `assets/review-data-template.json` when creating a new review-data file.
