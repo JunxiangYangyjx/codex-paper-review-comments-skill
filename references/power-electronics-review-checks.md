@@ -8,6 +8,7 @@ Use this reference for WPT, IPT, converters, motor drives, charging, rectifiers,
 - Theoretical consistency: dimensionally correct equations, stated assumptions, valid approximations, physically meaningful equivalent circuits, and a clear chain from model to claimed behavior.
 - Evidence-to-claim alignment: simulations and experiments should measure the outcome being claimed and distinguish the proposed contribution from the relevant baseline.
 - Internal coherence: topology, control description, simulation conditions, experiment, and conclusion should use compatible assumptions and operating points.
+- Follow the actual validation chain: a predicted mechanism should correspond to the simulated quantity and the experimentally measured outcome. Request more experiments only after locating a specific break in that chain, not merely because additional operating cases are possible.
 
 ## Conditional Checks
 
@@ -18,7 +19,7 @@ Use these only when they are central to a claim or needed to interpret the prese
 - Experimental scope: request one discriminating operating case when the existing test does not demonstrate the claimed mechanism. Do not routinely ask for full input/load/coupling/thermal maps.
 - Efficiency definition: require clear measurement boundaries when efficiency is a principal result. Detailed auxiliary-loss accounting or uncertainty analysis is optional unless it could change the conclusion.
 - Dynamic validation: require transient evidence only when dynamic performance, stability, or disturbance rejection is central to the contribution.
-- Reproducibility: request only the parameters needed to understand or reproduce the novel mechanism; ordinary commercial part numbers and complete instrument lists are not default review requirements.
+- Experimental conditions and parameters: request a specific missing item only when it prevents assessing the claimed mechanism or interpreting a central result. Name that consequence. Do not use general reproducibility concerns to demand full parameter tables, ordinary commercial part numbers, or instrument lists.
 
 ## Request Restraint
 
