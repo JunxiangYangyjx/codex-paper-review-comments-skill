@@ -9,8 +9,8 @@
     "basis_zh": "简短中文判断依据。"
   },
   "comments_to_editor": {
-    "en": "Explain what the paper does, its main contribution or innovation, and why this review decision is recommended.",
-    "zh": "说明文章做了什么、主要贡献或创新点，以及为什么建议该审稿结果。"
+    "en": "I recommend major revision. Briefly explain the contribution and decisive reasons. Replace the opening recommendation when recommendation.decision differs.",
+    "zh": "建议大修。简述文章贡献及决定性理由；若 recommendation.decision 不同，须同步修改开头的明确建议。"
   },
   "summary": {
     "en": "One concise English paragraph summarizing the work.",

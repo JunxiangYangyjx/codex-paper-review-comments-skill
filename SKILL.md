@@ -52,6 +52,7 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
    - Start from `assets/review-data-template.json` when creating a new review-data file.
    - Store paper metadata, recommendation, optional `comments_to_editor`, bilingual summary, major comments, minor comments, and evidence entries in JSON.
    - When `comments_to_editor` is requested or useful, write one concise bilingual paragraph that states what the paper does, its main contribution/innovation, and why the review decision is recommended. Keep this separate from the author-facing Copy-Ready Draft.
+   - Start Comments to Editor with an explicit recommendation in both languages, matching recommendation.decision: for example, "I recommend major revision." / "建议大修。" or "I recommend rejection." / "建议拒稿。" Then briefly explain the contribution and decisive reasons. Never leave the editor to infer the recommendation from the critique; use minor revision or acceptance explicitly when that is the actual decision.
 
 4. Build or update the HTML review page.
    - Prefer rendering from JSON:
