@@ -2,7 +2,7 @@
 
 ## Default Voice
 
-- Lead with the technical concern, then state what the authors should add, clarify, or revise.
+- Lead with the technical concern and why it matters.
 - Prefer compact, review-system-ready wording.
 - Avoid long paper-summary paragraphs inside the issue list.
 - Avoid exaggerated language. Use "not sufficiently demonstrated", "not clearly isolated", "requires clarification", "the evidence is too narrow", or "the claim should be narrowed".
@@ -10,17 +10,20 @@
 - Include only major and minor comments addressing actual manuscript weaknesses. Omit desirable extensions and future-work wish lists.
 - Prefer clarification, corrected reasoning, reanalysis of existing results, or narrowed claims before requesting new experiments.
 
+- Do not make every issue sound like a request to add more experiments, tables, or analysis. Normally only one or two major comments need explicit requests for new material; explain the problem and its consequence for the rest.
+
 ## Major Comment Pattern
 
 Use this shape:
 
 1. Problem sentence: identify the specific weakness.
 2. Evidence sentence: point to the relevant claim, table, figure, model, or experiment.
-3. Required action: give the least burdensome change that resolves the concern. Request a new experiment only when the central claim cannot be supported by clarification, correction, existing data, or a narrower claim.
+3. Consequence sentence: explain why the weakness limits the claim, interpretation, or publishability.
+4. Optional required action: when essential, give the least burdensome change that resolves the concern. Request a new experiment only when the central claim cannot be supported by clarification, correction, existing data, or a narrower claim.
 
 Example:
 
-`The application claim is broader than the verified operating conditions. The method is demonstrated only under fixed or calibrated coupling, while the conclusion is written for general misalignment. Please align the claim with the demonstrated range and explain why the existing evidence is sufficient. If wide-range misalignment is essential to the claimed contribution, provide one focused validation that directly tests it.`
+`The application claim is broader than the verified operating conditions. The method is demonstrated only under fixed or calibrated coupling, while the motivation includes scenarios where distance variation and misalignment are common. As a result, the evidence supports a fixed-coupling conclusion more strongly than the broader application statement.`
 
 ## Evidence Proportionality
 

@@ -5,7 +5,9 @@
 这个 skill 适合用来做论文审稿辅助，尤其是工程、电力电子、无线电能传输、变换器、控制和实验型论文。它会按照固定流程生成：
 
 - 论文做了什么、主要贡献和审稿建议
-- 5 个 major comments 和若干 minor comments
+- 通用的论文理解问答：研究问题、背景应用、关键理论、仿真、实验、结果、创新与边界
+- 正文直接展示关键结构、机理、原型和结果配图，附中文看图要点及原文定位
+- 按实际问题生成 major/minor comments，不为凑数量增加要求
 - `review-data.json` 结构化源文件，方便后续低 token 修改
 - 带对应材料截图的 HTML 审稿页面
 - 英文-only 的 `Copy-Ready Draft`，方便直接粘贴到审稿系统
@@ -49,6 +51,7 @@ Chinese trigger phrases are also included in the skill description, for example:
 
 The generated HTML review page follows this structure:
 
+- illustrated paper understanding with reusable questions, source locators, and reading tips
 - review recommendation
 - comments to editor / 给编辑的话, when needed
 - paper summary
@@ -78,11 +81,11 @@ python scripts/render_review_html.py path\to\review-data.json --output path\to\r
 
 For small follow-up edits, Codex should update the JSON and re-render the HTML instead of rereading the PDF or editing the full HTML by hand.
 
+The optional `paper_understanding` module is rendered from the same JSON. Add `illustrations` to each section instead of embedding repeated figure markup. Main illustrations appear near the explanation; auxiliary figures can be expanded. See [the schema and question guide](references/paper-understanding.md). Older JSON without this module remains supported. Understanding content and editor comments are excluded from the English submission draft.
+
 ## Opening Generated HTML
 
-Codex in-app browser may block direct `file://` URLs for local files. When this skill generates an HTML review page, Codex should serve the output folder through a local-only `127.0.0.1` static server and open the corresponding `http://127.0.0.1:<port>/<review-file>.html` URL automatically.
-
-Users should not need to run a separate CMD or PowerShell launcher. The local server is only for previewing generated review artifacts on the same machine.
+Open the saved HTML with the system-default browser/application, for example `Start-Process -FilePath <absolute-html-path>` on Windows. Users should not need to run a launcher. A server bound to `127.0.0.1` is only a fallback when local-file behavior prevents previewing; open that URL in the system browser as well.
 
 ## Dependencies
 
@@ -102,6 +105,12 @@ The contact-sheet helper can be run manually:
 
 ```powershell
 python scripts/make_contact_sheet.py path\to\review.html --output contact-sheet.png
+```
+
+Run the renderer regression checks with:
+
+```powershell
+python scripts/test_render_review_html.py
 ```
 
 ## Confidentiality

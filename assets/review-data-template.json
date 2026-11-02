@@ -3,6 +3,71 @@
   "paper_title": "Paper title",
   "date": "YYYY-MM-DD",
   "focus": "Short technical focus",
+  "source_pdf": "PaperID.pdf",
+  "paper_understanding": {
+    "title": "论文理解与证据梳理",
+    "subtitle": "围绕通用问题理解论文，再判断贡献与证据是否匹配。",
+    "overview": "Summarize the actual problem, proposed idea, principal result, and its evidence level.",
+    "updated_at": "YYYY-MM-DD",
+    "sections": [
+      {
+        "key": "work",
+        "title": "研究问题与主要工作",
+        "question": "文章研究了什么问题，提出了什么方案，主要比较对象是什么？",
+        "answer": "Write a manuscript-specific explanation, distinguishing author claims from reader assessment. State when evidence is not applicable or not provided.",
+        "sources": [],
+        "illustrations": []
+      },
+      {
+        "key": "background",
+        "title": "背景与应用",
+        "question": "为什么需要这项研究，现有方法有什么局限，实际验证了哪类应用？",
+        "answer": "Write a manuscript-specific explanation, distinguishing author claims from reader assessment. State when evidence is not applicable or not provided.",
+        "sources": [],
+        "illustrations": []
+      },
+      {
+        "key": "theory",
+        "title": "方法与关键理论",
+        "question": "方案为什么可能有效，关键模型、设计条件及成立前提是什么？",
+        "answer": "Write a manuscript-specific explanation, distinguishing author claims from reader assessment. State when evidence is not applicable or not provided.",
+        "sources": [],
+        "illustrations": []
+      },
+      {
+        "key": "simulation",
+        "title": "仿真与数值验证",
+        "question": "计算或仿真分别验证了哪些机制，使用什么模型、工况和比较基准？",
+        "answer": "Write a manuscript-specific explanation, distinguishing author claims from reader assessment. State when evidence is not applicable or not provided.",
+        "sources": [],
+        "illustrations": []
+      },
+      {
+        "key": "experiment",
+        "title": "实验设计与验证范围",
+        "question": "搭建了什么原型或研究，测试了哪些工况和指标，比较对象是否可比？",
+        "answer": "Write a manuscript-specific explanation, distinguishing author claims from reader assessment. State when evidence is not applicable or not provided.",
+        "sources": [],
+        "illustrations": []
+      },
+      {
+        "key": "results",
+        "title": "主要结果与证据等级",
+        "question": "最终得到了什么定量结果，哪些来自理论、仿真或实测，结果受什么条件限制？",
+        "answer": "Write a manuscript-specific explanation, distinguishing author claims from reader assessment. State when evidence is not applicable or not provided.",
+        "sources": [],
+        "illustrations": []
+      },
+      {
+        "key": "novelty",
+        "title": "创新点与适用边界",
+        "question": "相对已有工作新增了什么，增量属于哪一层，现有证据能支持到哪里？",
+        "answer": "Write a manuscript-specific explanation, distinguishing author claims from reader assessment. State when evidence is not applicable or not provided.",
+        "sources": [],
+        "illustrations": []
+      }
+    ]
+  },
   "recommendation": {
     "decision": "Major Revision",
     "basis_en": "Brief English basis for the recommendation.",

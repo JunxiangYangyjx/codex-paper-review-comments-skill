@@ -1,4 +1,4 @@
 interface:
   display_name: "Paper Review Comments"
-  short_description: "Reviewer comments as JSON-driven HTML evidence pages"
-  default_prompt: "Use $paper-review-comments 审一下这篇本地论文 PDF，生成审稿意见和带对应材料截图的 HTML 页面。"
+  short_description: "Illustrated paper understanding and evidence-based reviews"
+  default_prompt: "Use $paper-review-comments 审一下这篇本地论文 PDF，先用通用问答和关键配图解释论文，再生成审稿意见与英文提交稿。"

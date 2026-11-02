@@ -5,14 +5,31 @@ from __future__ import annotations
 
 import argparse
 import re
-import sys
+from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import unquote
 
 
-IMG_RE = re.compile(r'<img\s+[^>]*src="([^"]+)"', re.IGNORECASE)
 COPY_RE = re.compile(r"<h2>\s*Copy-Ready Draft\s*</h2>\s*<div[^>]*class=\"copy-block\"[^>]*>(.*?)</div>", re.IGNORECASE | re.DOTALL)
 CJK_RE = re.compile(r"[\u3400-\u9fff]")
 RAW_SUBSCRIPT_RE = re.compile(r"[A-Za-z]_\{")
+
+
+class ReportReferences(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.ids: list[str] = []
+        self.anchors: list[str] = []
+        self.images: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        values = dict(attrs)
+        if values.get("id"):
+            self.ids.append(values["id"])
+        if tag == "a" and values.get("href", "").startswith("#"):
+            self.anchors.append(unquote(values["href"][1:]))
+        if tag == "img" and values.get("src"):
+            self.images.append(values["src"])
 
 
 def main() -> int:
@@ -29,9 +46,13 @@ def main() -> int:
     content = html_path.read_text(encoding="utf-8")
     base = html_path.parent
 
-    refs = IMG_RE.findall(content)
+    parsed = ReportReferences()
+    parsed.feed(content)
+    refs = parsed.images
     unique_refs = sorted(set(refs))
-    missing = [ref for ref in unique_refs if not (base / ref).exists()]
+    missing = [ref for ref in unique_refs if not (base / unquote(ref)).exists()]
+    broken_anchors = sorted(set(parsed.anchors) - set(parsed.ids))
+    duplicate_ids = sorted({key for key in parsed.ids if parsed.ids.count(key) > 1})
 
     copy_match = COPY_RE.search(content)
     copy_block = copy_match.group(1) if copy_match else ""
@@ -45,9 +66,9 @@ def main() -> int:
     dollar_count = content.count("$")
     raw_subscripts = len(RAW_SUBSCRIPT_RE.findall(content))
 
-    asset_dirs = sorted({(base / ref).parent for ref in unique_refs})
+    asset_dirs = sorted({(base / unquote(ref)).parent for ref in unique_refs})
     unreferenced_assets: list[Path] = []
-    ref_paths = {(base / ref).resolve() for ref in unique_refs}
+    ref_paths = {(base / unquote(ref)).resolve() for ref in unique_refs}
     for asset_dir in asset_dirs:
         if asset_dir.exists() and asset_dir.is_dir():
             for path in asset_dir.iterdir():
@@ -69,6 +90,8 @@ def main() -> int:
         "unreferenced_assets": len(unreferenced_assets),
         "dollar_chars": dollar_count,
         "raw_subscript_patterns": raw_subscripts,
+        "broken_anchors": len(broken_anchors),
+        "duplicate_ids": len(duplicate_ids),
     }
 
     for key, value in checks.items():
@@ -95,6 +118,10 @@ def main() -> int:
         errors.append("One or more image references are missing.")
     if raw_subscripts:
         errors.append("Raw LaTeX-style subscript patterns were found.")
+    if broken_anchors:
+        errors.append("Broken internal links: " + ", ".join(broken_anchors))
+    if duplicate_ids:
+        errors.append("Duplicate HTML IDs: " + ", ".join(duplicate_ids))
     if dollar_count and not args.allow_dollar:
         errors.append("Dollar signs were found; verify formulas are rendered or intentionally plain text.")
 

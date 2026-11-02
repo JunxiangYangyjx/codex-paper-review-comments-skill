@@ -7,7 +7,7 @@ description: Generate reviewer-style comments from local academic PDFs as token-
 
 ## Purpose
 
-Use this skill to turn a local manuscript PDF into reviewer-style comments and a browser-friendly HTML review page. Prefer a token-efficient source file named `PaperID-review-data.json`, then render HTML from that data. The output should follow the current review-page pattern: bilingual analysis sections, an optional Comments to Editor section, major/minor issue cards, evidence under each relevant issue, and an English-only Copy-Ready Draft for direct submission.
+Use this skill to turn a local manuscript PDF into reviewer-style comments and an illustrated HTML review page. Prefer a token-efficient source file named `PaperID-review-data.json`, then render HTML from that data. Start with a general paper-understanding module, followed by the review judgment, optional Comments to Editor, major/minor issue cards with evidence, and an English-only Copy-Ready Draft for submission.
 
 Do not require an existing review DOCX. If a DOCX is present, treat it only as optional style context when the user explicitly asks.
 
@@ -16,6 +16,7 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
 - Treat `*-review-data.json` as the source of truth when it exists. Edit JSON first, then render HTML.
 - For follow-up edits to an existing review, do not reread the PDF, references, or whole HTML unless the requested change needs them. Use `rg` to locate only the relevant JSON or HTML fields.
 - Keep the Copy-Ready Draft generated from the English comments when possible. If hand-written, update it from the same JSON change.
+- Keep explanatory answers and illustrations in `paper_understanding`, so re-rendering preserves them without adding them to the author-facing submission draft.
 - Delay expensive figure/table/equation cropping until the major/minor issue list is stable or the user explicitly asks for final HTML evidence.
 - Do not paste large PDF text into chat. Record short evidence locators in JSON instead.
 
@@ -39,9 +40,11 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
    - Base the recommendation on whether the identified flaws can be reasonably repaired while preserving the core contribution; follow the decision guidance in references/reviewer-style.md.
 
 3. Draft the comments in `review-data.json`.
+   - For a new full review, populate `paper_understanding` before the formal comments. Read [references/paper-understanding.md](references/paper-understanding.md) for the seven general questions, evidence distinctions, and illustration schema. Existing reviews without this field remain supported; a narrow comment edit does not require backfilling it unless requested.
+   - Use ordinary explanatory language for the questions, with manuscript-specific answers and source locators. Cover the research problem, background/application, method/theory, simulation, experiments, results, and innovation/boundaries. State when a category is not applicable rather than inventing evidence.
    - Use about 3-5 major issues when genuinely distinct high-impact concerns exist; do not fill a quota.
    - Add about 2-5 minor issues when useful; omit low-value checklist comments.
-   - Keep comments concise, specific, and actionable.
+   - Keep comments concise and specific. Do not turn every major comment into a requested experiment or author to-do list; use explicit supplement/revision requirements only when the missing evidence is essential to the recommendation.
    - Write like a domain reviewer. Avoid generic AI/ML review jargon unless it is native to the manuscript.
    - Classify review comments only as major or minor. Omit optional extensions and wish lists rather than adding a separate optional-suggestions category. Major comments concern contribution, correctness, or a substantive break in the validation chain; minor comments concern localized corrections or clarity.
    - Do not routinely request experimental conditions, parameter lists, component details, operating sweeps, thermal tests, or uncertainty budgets. Missing detail alone is not a defect. Request only a specific condition or parameter whose absence prevents evaluating an identified claim, and explain why it matters.
@@ -62,6 +65,7 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
    - Create a sibling asset folder named after the output file, for example `PaperID-review-assets/`.
    - Include:
      - title/header metadata
+     - paper understanding: general questions, concrete answers, and explanatory figures visible near the relevant text
      - recommendation
      - Comments to Editor / 给编辑的话 when `comments_to_editor` is present
      - brief paper summary and contribution assessment
@@ -72,6 +76,8 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
    - Analysis and issue cards may be bilingual when useful, but the Copy-Ready Draft must be English only.
 
 5. Attach or plan supporting material.
+   - Explanatory figures and issue evidence serve different purposes. Put core topology/architecture, mechanism, simulation, prototype, and result figures directly in the introduction where they help understanding; do not hide every useful figure in evidence panels. Prefer a few relevant original figures over decorative illustrations or full PDF pages.
+   - Store explanatory figures in each section's `illustrations` with `src`, `title`, `tip`, `page`, `label`, and `placement` (`main` by default, `detail` for auxiliary figures). The renderer supplies captions, click-to-enlarge links, and a Chinese reading tip. Do not also paste the same illustration markup into `answer_html`.
    - For each issue that cites a figure, table, equation, or source passage, first add a compact evidence list entry in JSON.
    - Each evidence entry should include:
      - `page`: PDF page number.
@@ -95,15 +101,13 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
      `python scripts/validate_review_html.py path/to/review.html`
    - Fix any missing image refs, unreferenced assets, copy-ready Chinese text, raw HTML tags in the copy-ready block, or unrendered formula markers.
    - Manually inspect the important crops. The script cannot judge semantic crop quality.
+   - Check the understanding module's equations, visible figures, source links, desktop/narrow-screen layout, and separation from the English submission draft. Use rendered MathML or equation assets for important formulas; raw LaTeX is not rendered by this offline HTML template.
 
 7. Open the HTML preview for the user.
    - Do not ask the user to run a CMD, PowerShell script, or manual file opener.
-   - Do not rely on direct `file://` navigation in the Codex in-app browser; local-file URLs may be blocked by browser security policy.
-   - Start or reuse a local static server bound to `127.0.0.1` in the HTML output directory.
-   - Prefer port `8766`; if it is unavailable, choose the next free local port.
-   - Open the Codex in-app browser to `http://127.0.0.1:<port>/<html-file-name>`.
-   - Keep the server local-only and do not expose review artifacts externally.
-   - Final answer should link both the local HTML file path and the browser URL, then summarize checks performed.
+   - Open the saved HTML with the system-default browser/application. On Windows, use `Start-Process -FilePath <absolute-html-path>`; do not use the Codex in-app browser by default.
+   - A local server is only needed when local-file behavior prevents the preview from working. If used, bind it to `127.0.0.1` and open its URL with the system browser.
+   - Final answer should link the local HTML and summarize meaningful changes and verification.
 
 ## Output Rules
 
@@ -111,4 +115,4 @@ Do not require an existing review DOCX. If a DOCX is present, treat it only as o
 - The Copy-Ready Draft section must be English only and directly copyable into a review system.
 - Use plain text formula notation in the Copy-Ready Draft, for example `Gvi = 1/(omega Lf1)`, not HTML tags or LaTeX markup.
 - Keep the workspace clean: remove temporary render folders and unused image assets.
-- If a Word document is open and locked, ask the user to close it instead of writing a duplicate.
+- Never publish confidential manuscript content, review data, generated reports, or manuscript crops when syncing this reusable skill to a repository.
